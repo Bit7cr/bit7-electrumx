@@ -1,4 +1,4 @@
-# ElectrumX - Reimplementation of electrum-server (Bit7 Adapted)
+# ElectrumX - Bit7 Adapted
 
   :License: MIT
   :Language: Python (>= 3.8)
