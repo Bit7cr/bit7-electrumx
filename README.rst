@@ -18,6 +18,3 @@ Electrum server network runs ElectrumX.
 Documentation
 =============
 See `readthedocs <https://electrumx-spesmilo.readthedocs.io/>`_.
-
-
-##Setup:
