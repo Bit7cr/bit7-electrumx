@@ -586,6 +586,24 @@ class HOdlcoin(Coin):
     TX_PER_BLOCK = 5
 
 
+class Bit7(Coin):
+    NAME = "Bit7"
+    SHORTNAME = "BTC7"
+    NET = "mainnet"
+    XPUB_VERBYTES = bytes.fromhex('0488b21e')
+    XPRV_VERBYTES = bytes.fromhex('0488ade4')
+    P2PKH_VERBYTE = bytes.fromhex('1a')    
+    P2SH_VERBYTE = bytes.fromhex('19')     
+    WIF_BYTE = bytes.fromhex('99') 
+    GENESIS_HASH = '00000c21e6aa8594c8f082ce691ea0b2a7b0bca84daa3f7b8966d440cbd4e339'
+    TX_COUNT = 11620
+    TX_COUNT_HEIGHT = 8356
+    TX_PER_BLOCK = 2
+    RPC_PORT = 15533
+    REORG_LIMIT = 800
+    DESERIALIZER = lib_tx.DeserializerSegWit
+
+
 class BitcoinSV(BitcoinMixin, Coin):
     NAME = "BitcoinSV"
     SHORTNAME = "BSV"

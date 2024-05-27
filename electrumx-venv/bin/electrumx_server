@@ -1,0 +1,4 @@
+#!/home/cptpackage/Desktop/electrumx/electrumx-venv/bin/python3
+# EASY-INSTALL-SCRIPT: 'e-x==1.16.0','electrumx_server'
+__requires__ = 'e-x==1.16.0'
+__import__('pkg_resources').run_script('e-x==1.16.0', 'electrumx_server')

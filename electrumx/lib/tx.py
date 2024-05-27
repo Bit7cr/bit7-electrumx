@@ -1381,3 +1381,70 @@ class DeserializerPrimecoin(Deserializer):
         header_end = self.cursor
         self.cursor = start
         return self._read_nbytes(header_end - start)
+
+
+class DeserializerBit7(Deserializer):
+    def read_tx(self):
+        start = self.cursor
+        version = self._read_le_int32()
+        vin = self._read_inputs()
+        vout = self._read_outputs()
+        locktime = self._read_le_uint32()
+        return Transaction(version, vin, vout, locktime)
+
+    def _read_inputs(self):
+        count = self._read_varint()
+        return [self._read_input() for _ in range(count)]
+
+    def _read_outputs(self):
+        count = self._read_varint()
+        return [self._read_output() for _ in range(count)]
+
+    def _read_input(self):
+        prev_hash = self._read_nbytes(32)
+        prev_index = self._read_le_uint32()
+        script = self._read_varbytes()
+        sequence = self._read_le_uint32()
+        return TxInput(prev_hash, prev_index, script, sequence)
+
+    def _read_output(self):
+        value = self._read_le_int64()
+        script = self._read_varbytes()
+        return TxOutput(value, script)
+
+    def _read_varint(self):
+        value = self.binary[self.cursor]
+        self.cursor += 1
+        if value < 0xfd:
+            return value
+        if value == 0xfd:
+            return self._read_le_uint16()
+        if value == 0xfe:
+            return self._read_le_uint32()
+        return self._read_le_uint64()
+
+    def _read_varbytes(self):
+        length = self._read_varint()
+        return self._read_nbytes(length)
+
+    def _read_le_int32(self):
+        result = struct.unpack('<i', self.binary[self.cursor:self.cursor+4])[0]
+        self.cursor += 4
+        return result
+
+    def _read_le_uint32(self):
+        result = struct.unpack('<I', self.binary[self.cursor:self.cursor+4])[0]
+        self.cursor += 4
+        return result
+
+    def _read_le_int64(self):
+        result = struct.unpack('<q', self.binary[self.cursor:self.cursor+8])[0]
+        self.cursor += 8
+        return result
+
+    def _read_nbytes(self, n):
+        end = self.cursor + n
+        assert self.binary_length >= end, f"Attempting to read beyond binary length: {self.binary_length} < {end}"
+        result = self.binary[self.cursor:end]
+        self.cursor = end
+        return result
